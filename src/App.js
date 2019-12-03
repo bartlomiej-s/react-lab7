@@ -7,9 +7,12 @@ class App extends React.Component {
     this.state = {
       employees: [],
       loaded: false,
-      age: 18
+      age: 18,
+      badphone: false,
+      bademail: false
     }
     this.ageChange = this.ageChange.bind(this)
+    this.submit = this.submit.bind(this)
   }
 
   getData() {
@@ -40,8 +43,47 @@ class App extends React.Component {
 
   ageChange(evt) {
     this.setState({
-      age: evt.target.value
+      age: evt.target.value,
+      bademail: false,
+      badphone: false
     })
+  }
+
+  submit() {
+    var phoneregex = /^\d{9}$/
+    var emailregex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    var phoneinput = document.getElementsByName('parentphoneno')[0]
+    var emailinput = document.getElementsByName('email')[0]
+    if(phoneinput)
+    {
+      if(phoneinput.value.match(phoneregex))
+      {
+        this.setState({
+          badphone: false
+        })
+      }
+      else
+      {
+        this.setState({
+         badphone: true
+        })
+      }
+    }
+    if(emailinput)
+    {
+      if(emailinput.value.match(emailregex))
+      {
+        this.setState({
+          bademail: false
+        })
+      }
+      else
+      {
+       this.setState({
+          bademail: true
+        })
+      }
+    }
   }
 
   render() {
@@ -54,7 +96,8 @@ class App extends React.Component {
           <input style={{margin: "0px 0px 40px 44px", width: "60%"}} type="text" name="parentname" />
           <br />
           <label style={{margin: "0px 0px 0px 10%"}}>Parent Phone No.</label>
-          <input style={{margin: "0px 0px 40px 13px", width: "60%"}} type="text" name="parentphoneno" />
+          <input style={{margin: "0px 0px 0px 13px", width: "60%"}} type="text" name="parentphoneno" />
+          <p align="center">{this.state.badphone && "Wrong phone no."}</p>
           <br />
       </div>
     )
@@ -67,7 +110,8 @@ class App extends React.Component {
           <input style={{margin: "0px 0px 40px 93px", width: "60%"}} type="text" name="name" />
           <br />
           <label style={{margin: "0px 0px 0px 10%"}}>Email</label>
-          <input style={{margin: "0px 0px 40px 98px", width: "60%"}} type="text" name="email" />
+          <input style={{margin: "0px 0px 0px 98px", width: "60%"}} type="text" name="email" />
+          <p align="center">{this.state.bademail && "Wrong email"}</p>
           <br />
       </div>
     )
@@ -85,7 +129,7 @@ class App extends React.Component {
         <div className="Form">
           <form>
             {this.state.age<18 ? underageForm : normalForm}
-            <input style={{margin: "0px 50px 25px 0px", float: "right"}} type="submit" value="Submit" />
+            <input style={{margin: "0px 50px 25px 0px", float: "right"}} onClick={this.submit} type="button" value="Submit" />
           </form>
         </div>
       </div>
