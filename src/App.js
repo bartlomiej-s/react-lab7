@@ -1,5 +1,14 @@
 import React from 'react'
 
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom"
+
+import Success from './Success'
+
 class App extends React.Component {
 
   constructor(props) {
@@ -174,24 +183,38 @@ class App extends React.Component {
           <br />
       </div>
     )
+
+    const ConditionalLink = this.state.validationpassed == "" ? Link : "div";
+
     const AppVar = (
-      <div>
-        <div className="App">
-          {this.state.loaded && <h1 style={{margin: "20px 0px 20px 50px"}}>Employees</h1>}
-          {this.state.loaded ? this.state.employees : 'Loading...'}
-        </div>
-        <div className="Divider">
-          <br /><br />
-          <hr width = "95%" />
-          <br /><br />
-        </div>
-        <div className="Form">
-          <form>
-            {this.state.age<18 ? underageForm : normalForm}
-            <input style={{margin: "0px 50px 25px 0px", float: "right"}} disabled={this.state.validationpassed} onClick={this.submit} type="button" value="Submit" />
-          </form>
-        </div>
-      </div>
+      <Router>
+        <Switch>
+          <Route exact path="/">
+            <div>
+              <div className="App">
+                {this.state.loaded && <h1 style={{margin: "20px 0px 20px 50px"}}>Employees</h1>}
+                {this.state.loaded ? this.state.employees : 'Loading...'}
+              </div>
+              <div className="Divider">
+                <br /><br />
+                <hr width = "95%" />
+                <br /><br />
+              </div>
+              <div className="Form">
+                <form>
+                  {this.state.age<18 ? underageForm : normalForm}
+                  <ConditionalLink to="/success">
+                    <input style={{margin: "0px 50px 25px 0px", float: "right"}} disabled={this.state.validationpassed} onClick={this.submit} type="button" value="Submit" />
+                  </ConditionalLink>
+                </form>
+              </div>
+            </div>
+          </Route>
+          <Route path="/success">
+            <Success></Success>
+          </Route>
+        </Switch>
+      </Router>
     )
 
     return AppVar
